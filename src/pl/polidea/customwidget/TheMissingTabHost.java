@@ -76,6 +76,8 @@ public class TheMissingTabHost extends FrameLayout implements
      * 
      * 
      * 
+     * 
+     * 
      * }
      */
     protected LocalActivityManager mLocalActivityManager = null;
@@ -546,7 +548,7 @@ public class TheMissingTabHost extends FrameLayout implements
                     false); // no inflate params
 
             final TextView tv = (TextView) tabIndicator
-                    .findViewById(R.id.title);
+                    .findViewById(android.R.id.title);
             tv.setText(mLabel);
 
             /*
@@ -584,7 +586,7 @@ public class TheMissingTabHost extends FrameLayout implements
                     false); // no inflate params
 
             final TextView tv = (TextView) tabIndicator
-                    .findViewById(R.id.title);
+                    .findViewById(android.R.id.title);
             tv.setText(mLabel);
 
             final ImageView iconView = (ImageView) tabIndicator
