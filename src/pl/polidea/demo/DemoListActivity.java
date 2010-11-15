@@ -14,7 +14,7 @@ public abstract class DemoListActivity extends Activity {
         for (int i = 0; i < 20; i++) {
             adapter.add(getName() + " : " + i);
         }
-        setContentView(R.layout.tab_view);
+        setContentView(R.layout.list_view);
         final ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(adapter);
     }

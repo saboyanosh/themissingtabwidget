@@ -12,8 +12,6 @@ public class TabWidgetDemo extends FlexibleTabActivity {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-
         final Resources res = getResources();
         final FlexibleTabHost tabHost = getTabHost();
         final Intent oneIntent = new Intent().setClass(this, ActivityOne.class);
