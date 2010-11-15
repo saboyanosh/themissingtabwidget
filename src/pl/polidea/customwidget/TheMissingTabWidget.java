@@ -1,5 +1,8 @@
 package pl.polidea.customwidget;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import pl.polidea.demo.R;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -93,6 +96,27 @@ public class TheMissingTabWidget extends LinearLayout implements
         }
     }
 
+    private void updateChildrenDrawingOrder() {
+        try {
+            final Class< ? > clazz = ViewGroup.class;
+            final Method m = clazz.getDeclaredMethod(
+                    "setChildrenDrawingOrderEnabled", boolean.class);
+            m.invoke(this, true);
+            return;
+        } catch (final SecurityException e) {
+            // skip - we cannot do much
+        } catch (final NoSuchMethodException e) {
+            // skip - we cannot do much
+        } catch (final IllegalArgumentException e) {
+            // skip - we cannot do much
+        } catch (final IllegalAccessException e) {
+            // skip - we cannot do much
+        } catch (final InvocationTargetException e) {
+            // skip - we cannot do much
+        }
+
+    }
+
     private void initTabWidget() {
         final int orientation = getResources().getConfiguration().orientation;
         switch (orientation) {
@@ -107,10 +131,9 @@ public class TheMissingTabWidget extends LinearLayout implements
             this.orientation = Configuration.ORIENTATION_PORTRAIT;
             break;
         }
-        // XXX: childrenDrawingOrderEnabled
+        updateChildrenDrawingOrder();
         final Context context = getContext();
         final Resources resources = context.getResources();
-
         if (mLeftStrip == null) {
             mLeftStrip = resources.getDrawable(R.drawable.tab_bottom_left);
         }
@@ -456,7 +479,8 @@ public class TheMissingTabWidget extends LinearLayout implements
 
         // TODO: detect this via geometry with a tabwidget listener rather
         // than potentially interfere with the view's listener
-        child.setOnClickListener(new TabClickListener(getTabCount() - 1));
+        child.setOnClickListener(new TheMissingTabClickListener(
+                getTabCount() - 1));
         child.setOnFocusChangeListener(this);
     }
 
@@ -490,11 +514,11 @@ public class TheMissingTabWidget extends LinearLayout implements
     }
 
     // registered with each tab indicator so we can notify tab host
-    private class TabClickListener implements OnClickListener {
+    private class TheMissingTabClickListener implements OnClickListener {
 
         private final int mTabIndex;
 
-        private TabClickListener(final int tabIndex) {
+        private TheMissingTabClickListener(final int tabIndex) {
             mTabIndex = tabIndex;
         }
 
