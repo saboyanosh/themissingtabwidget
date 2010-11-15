@@ -8,18 +8,19 @@
 	WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. ** See the 
 	License for the specific language governing permissions and ** limitations 
 	under the License. */ -->
+	
 
-<pl.polidea.customwidget.FlexibleTabHost
+<pl.polidea.customwidget.TheMissingTabHost
 	xmlns:android="http://schemas.android.com/apk/res/android" android:id="@android:id/tabhost"
 	android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<pl.polidea.customwidget.FlexibleTabWidget
+		<pl.polidea.customwidget.TheMissingTabWidget
 			android:id="@android:id/tabs" android:layout_width="wrap_content"
 			android:layout_height="fill_parent" android:layout_weight="0" />
 		<FrameLayout android:id="@android:id/tabcontent"
 			android:layout_height="fill_parent" android:layout_width="0dip"
 			android:layout_weight="1" />
 	</LinearLayout>
-</pl.polidea.customwidget.FlexibleTabHost>
+</pl.polidea.customwidget.TheMissingTabHost>
 

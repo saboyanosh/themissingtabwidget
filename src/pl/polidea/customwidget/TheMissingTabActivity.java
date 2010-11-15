@@ -28,12 +28,12 @@ import android.widget.TextView;
 /**
  * An activity that contains and runs multiple embedded activities or views.
  */
-public class FlexibleTabActivity extends ActivityGroup {
-    private FlexibleTabHost mTabHost;
+public class TheMissingTabActivity extends ActivityGroup {
+    private TheMissingTabHost mTabHost;
     private String mDefaultTab = null;
     private int mDefaultTabIndex = -1;
 
-    public FlexibleTabActivity() {
+    public TheMissingTabActivity() {
     }
 
     /**
@@ -104,7 +104,7 @@ public class FlexibleTabActivity extends ActivityGroup {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        mTabHost = (FlexibleTabHost) findViewById(android.R.id.tabhost);
+        mTabHost = (TheMissingTabHost) findViewById(android.R.id.tabhost);
 
         if (mTabHost == null) {
             throw new RuntimeException(
@@ -137,7 +137,7 @@ public class FlexibleTabActivity extends ActivityGroup {
      * 
      * @return the {@link TabHost} the activity is using to host its tabs.
      */
-    public FlexibleTabHost getTabHost() {
+    public TheMissingTabHost getTabHost() {
         ensureTabHost();
         return mTabHost;
     }
@@ -149,7 +149,7 @@ public class FlexibleTabActivity extends ActivityGroup {
      * @return the {@link TabWidget} the activity is using to draw the actual
      *         tabs.
      */
-    public FlexibleTabWidget getTabWidget() {
+    public TheMissingTabWidget getTabWidget() {
         return mTabHost.getTabWidget();
     }
 }

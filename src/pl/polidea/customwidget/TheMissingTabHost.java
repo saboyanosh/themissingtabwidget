@@ -43,17 +43,19 @@ import android.widget.TextView;
  * typically controlled using this container object, rather than setting values
  * on the child elements themselves.
  */
-public class FlexibleTabHost extends FrameLayout implements
+public class TheMissingTabHost extends FrameLayout implements
         ViewTreeObserver.OnTouchModeChangeListener {
 
-    private FlexibleTabWidget mTabWidget;
+    private TheMissingTabWidget mTabWidget;
     private FrameLayout mTabContent;
-    private final List<FlexibleTabSpec> mTabSpecs = new ArrayList<FlexibleTabSpec>(
+    private final List<TheMissingTabSpec> mTabSpecs = new ArrayList<TheMissingTabSpec>(
             2);
     protected int mCurrentTab = -1;
     private View mCurrentView = null;
     /**
      * This field should be made private, so it is hidden from the SDK. {@hide
+     * 
+     * 
      * 
      * 
      * 
@@ -80,12 +82,12 @@ public class FlexibleTabHost extends FrameLayout implements
     private OnTabChangeListener mOnTabChangeListener;
     private OnKeyListener mTabKeyListener;
 
-    public FlexibleTabHost(final Context context) {
+    public TheMissingTabHost(final Context context) {
         super(context);
         initTabHost();
     }
 
-    public FlexibleTabHost(final Context context, final AttributeSet attrs) {
+    public TheMissingTabHost(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         initTabHost();
     }
@@ -99,13 +101,13 @@ public class FlexibleTabHost extends FrameLayout implements
     }
 
     /**
-     * Get a new {@link FlexibleTabSpec} associated with this tab host.
+     * Get a new {@link TheMissingTabSpec} associated with this tab host.
      * 
      * @param tag
      *            required tag of tab.
      */
-    public FlexibleTabSpec newTabSpec(final String tag) {
-        return new FlexibleTabSpec(tag);
+    public TheMissingTabSpec newTabSpec(final String tag) {
+        return new TheMissingTabSpec(tag);
     }
 
     /**
@@ -121,10 +123,10 @@ public class FlexibleTabHost extends FrameLayout implements
      * mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
      */
     public void setup() {
-        mTabWidget = (FlexibleTabWidget) findViewById(android.R.id.tabs);
+        mTabWidget = (TheMissingTabWidget) findViewById(android.R.id.tabs);
         if (mTabWidget == null) {
             throw new RuntimeException(
-                    "Your TabHost must have a FlexibleTabWidget whose id attribute is 'android.R.id.tabs'");
+                    "Your TabHost must have a TheMissingTabWidget whose id attribute is 'android.R.id.tabs'");
         }
 
         // KeyListener to attach to all tabs. Detects non-navigation keys
@@ -150,7 +152,7 @@ public class FlexibleTabHost extends FrameLayout implements
         };
 
         mTabWidget
-                .setTabSelectionListener(new FlexibleTabWidget.OnTabSelectionChanged() {
+                .setTabSelectionListener(new TheMissingTabWidget.OnTabSelectionChanged() {
                     @Override
                     public void onTabSelectionChanged(final int tabIndex,
                             final boolean clicked) {
@@ -164,15 +166,15 @@ public class FlexibleTabHost extends FrameLayout implements
         mTabContent = (FrameLayout) findViewById(android.R.id.tabcontent);
         if (mTabContent == null) {
             throw new RuntimeException(
-                    "Your FlexibleTabHost must have a FrameLayout whose id attribute is "
+                    "Your TheMissingTabHost must have a FrameLayout whose id attribute is "
                             + "'android.R.id.tabcontent'");
         }
     }
 
     /**
      * If you are using
-     * {@link FlexibleTabSpec#setContent(android.content.Intent)}, this must be
-     * called since the activityGroup is needed to launch the local activity.
+     * {@link TheMissingTabSpec#setContent(android.content.Intent)}, this must
+     * be called since the activityGroup is needed to launch the local activity.
      * 
      * This is done for you if you extend {@link android.app.TabActivity}.
      * 
@@ -223,7 +225,7 @@ public class FlexibleTabHost extends FrameLayout implements
      * @param tabSpec
      *            Specifies how to create the indicator and content.
      */
-    public void addTab(final FlexibleTabSpec tabSpec) {
+    public void addTab(final TheMissingTabSpec tabSpec) {
 
         if (tabSpec.mIndicatorStrategy == null) {
             throw new IllegalArgumentException(
@@ -263,7 +265,7 @@ public class FlexibleTabHost extends FrameLayout implements
         invalidate();
     }
 
-    public FlexibleTabWidget getTabWidget() {
+    public TheMissingTabWidget getTabWidget() {
         return mTabWidget;
     }
 
@@ -349,7 +351,7 @@ public class FlexibleTabHost extends FrameLayout implements
         }
 
         mCurrentTab = index;
-        final FlexibleTabHost.FlexibleTabSpec spec = mTabSpecs.get(index);
+        final TheMissingTabHost.TheMissingTabSpec spec = mTabSpecs.get(index);
 
         // Call the tab widget's focusCurrentTab(), instead of just
         // selecting the tab.
@@ -426,21 +428,21 @@ public class FlexibleTabHost extends FrameLayout implements
      * {@link TabContentFactory} that creates the {@link View} content. 3) an
      * {@link Intent} that launches an {@link android.app.Activity}.
      */
-    public class FlexibleTabSpec {
+    public class TheMissingTabSpec {
 
         private final String mTag;
 
         private IndicatorStrategy mIndicatorStrategy;
         private ContentStrategy mContentStrategy;
 
-        private FlexibleTabSpec(final String tag) {
+        private TheMissingTabSpec(final String tag) {
             mTag = tag;
         }
 
         /**
          * Specify a label as the tab indicator.
          */
-        public FlexibleTabSpec setIndicator(final CharSequence label) {
+        public TheMissingTabSpec setIndicator(final CharSequence label) {
             mIndicatorStrategy = new LabelIndicatorStrategy(label);
             return this;
         }
@@ -448,7 +450,7 @@ public class FlexibleTabHost extends FrameLayout implements
         /**
          * Specify a label and icon as the tab indicator.
          */
-        public FlexibleTabSpec setIndicator(final CharSequence label,
+        public TheMissingTabSpec setIndicator(final CharSequence label,
                 final Drawable icon) {
             mIndicatorStrategy = new LabelAndIconIndicatorStrategy(label, icon);
             return this;
@@ -457,7 +459,7 @@ public class FlexibleTabHost extends FrameLayout implements
         /**
          * Specify a view as the tab indicator.
          */
-        public FlexibleTabSpec setIndicator(final View view) {
+        public TheMissingTabSpec setIndicator(final View view) {
             mIndicatorStrategy = new ViewIndicatorStrategy(view);
             return this;
         }
@@ -466,7 +468,7 @@ public class FlexibleTabHost extends FrameLayout implements
          * Specify the id of the view that should be used as the content of the
          * tab.
          */
-        public FlexibleTabSpec setContent(final int viewId) {
+        public TheMissingTabSpec setContent(final int viewId) {
             mContentStrategy = new ViewIdContentStrategy(viewId);
             return this;
         }
@@ -475,7 +477,8 @@ public class FlexibleTabHost extends FrameLayout implements
          * Specify a {@link android.widget.TabHost.TabContentFactory} to use to
          * create the content of the tab.
          */
-        public FlexibleTabSpec setContent(final TabContentFactory contentFactory) {
+        public TheMissingTabSpec setContent(
+                final TabContentFactory contentFactory) {
             mContentStrategy = new FactoryContentStrategy(mTag, contentFactory);
             return this;
         }
@@ -483,7 +486,7 @@ public class FlexibleTabHost extends FrameLayout implements
         /**
          * Specify an intent to use to launch an activity as the tab content.
          */
-        public FlexibleTabSpec setContent(final Intent intent) {
+        public TheMissingTabSpec setContent(final Intent intent) {
             mContentStrategy = new IntentContentStrategy(mTag, intent);
             return this;
         }
