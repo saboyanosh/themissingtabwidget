@@ -1,13 +1,13 @@
 package pl.polidea.demo;
 
-import pl.polidea.customwidget.HorizontalTabActivity;
-import pl.polidea.customwidget.HorizontalTabHost;
-import pl.polidea.customwidget.HorizontalTabHost.HorizontalTabSpec;
+import pl.polidea.customwidget.FlexibleTabActivity;
+import pl.polidea.customwidget.FlexibleTabHost;
+import pl.polidea.customwidget.FlexibleTabHost.FlexibleTabSpec;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-public class TabWidgetDemo extends HorizontalTabActivity {
+public class TabWidgetDemo extends FlexibleTabActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -15,21 +15,21 @@ public class TabWidgetDemo extends HorizontalTabActivity {
         setContentView(R.layout.main);
 
         final Resources res = getResources();
-        final HorizontalTabHost tabHost = getTabHost();
+        final FlexibleTabHost tabHost = getTabHost();
         final Intent oneIntent = new Intent().setClass(this, ActivityOne.class);
-        final HorizontalTabSpec oneSpec = tabHost
+        final FlexibleTabSpec oneSpec = tabHost
                 .newTabSpec("One")
                 .setIndicator("One", res.getDrawable(R.drawable.ic_tab_artists))
                 .setContent(oneIntent);
         tabHost.addTab(oneSpec);
         final Intent twoIntent = new Intent().setClass(this, ActivityTwo.class);
-        final HorizontalTabSpec twoSpec = tabHost.newTabSpec("Two")
+        final FlexibleTabSpec twoSpec = tabHost.newTabSpec("Two")
                 .setIndicator("Two").setContent(twoIntent);
         tabHost.addTab(twoSpec);
 
         final Intent threeIntent = new Intent().setClass(this,
                 ActivityThree.class);
-        final HorizontalTabSpec threeSpec = tabHost.newTabSpec("Three")
+        final FlexibleTabSpec threeSpec = tabHost.newTabSpec("Three")
                 .setIndicator("Three").setContent(threeIntent);
         tabHost.addTab(threeSpec);
 

@@ -43,17 +43,19 @@ import android.widget.TextView;
  * typically controlled using this container object, rather than setting values
  * on the child elements themselves.
  */
-public class HorizontalTabHost extends FrameLayout implements
+public class FlexibleTabHost extends FrameLayout implements
         ViewTreeObserver.OnTouchModeChangeListener {
 
-    private HorizontalTabWidget mTabWidget;
+    private FlexibleTabWidget mTabWidget;
     private FrameLayout mTabContent;
-    private final List<HorizontalTabSpec> mTabSpecs = new ArrayList<HorizontalTabSpec>(
+    private final List<FlexibleTabSpec> mTabSpecs = new ArrayList<FlexibleTabSpec>(
             2);
     protected int mCurrentTab = -1;
     private View mCurrentView = null;
     /**
      * This field should be made private, so it is hidden from the SDK. {@hide
+     * 
+     * 
      * 
      * 
      * 
@@ -78,12 +80,12 @@ public class HorizontalTabHost extends FrameLayout implements
     private OnTabChangeListener mOnTabChangeListener;
     private OnKeyListener mTabKeyListener;
 
-    public HorizontalTabHost(final Context context) {
+    public FlexibleTabHost(final Context context) {
         super(context);
         initTabHost();
     }
 
-    public HorizontalTabHost(final Context context, final AttributeSet attrs) {
+    public FlexibleTabHost(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         initTabHost();
     }
@@ -97,13 +99,13 @@ public class HorizontalTabHost extends FrameLayout implements
     }
 
     /**
-     * Get a new {@link HorizontalTabSpec} associated with this tab host.
+     * Get a new {@link FlexibleTabSpec} associated with this tab host.
      * 
      * @param tag
      *            required tag of tab.
      */
-    public HorizontalTabSpec newTabSpec(final String tag) {
-        return new HorizontalTabSpec(tag);
+    public FlexibleTabSpec newTabSpec(final String tag) {
+        return new FlexibleTabSpec(tag);
     }
 
     /**
@@ -119,10 +121,10 @@ public class HorizontalTabHost extends FrameLayout implements
      * mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
      */
     public void setup() {
-        mTabWidget = (HorizontalTabWidget) findViewById(android.R.id.tabs);
+        mTabWidget = (FlexibleTabWidget) findViewById(android.R.id.tabs);
         if (mTabWidget == null) {
             throw new RuntimeException(
-                    "Your TabHost must have a HorizontalTabWidget whose id attribute is 'android.R.id.tabs'");
+                    "Your TabHost must have a FlexibleTabWidget whose id attribute is 'android.R.id.tabs'");
         }
 
         // KeyListener to attach to all tabs. Detects non-navigation keys
@@ -148,7 +150,7 @@ public class HorizontalTabHost extends FrameLayout implements
         };
 
         mTabWidget
-                .setTabSelectionListener(new HorizontalTabWidget.OnTabSelectionChanged() {
+                .setTabSelectionListener(new FlexibleTabWidget.OnTabSelectionChanged() {
                     @Override
                     public void onTabSelectionChanged(final int tabIndex,
                             final boolean clicked) {
@@ -162,15 +164,15 @@ public class HorizontalTabHost extends FrameLayout implements
         mTabContent = (FrameLayout) findViewById(android.R.id.tabcontent);
         if (mTabContent == null) {
             throw new RuntimeException(
-                    "Your HorizontalTabHost must have a FrameLayout whose id attribute is "
+                    "Your FlexibleTabHost must have a FrameLayout whose id attribute is "
                             + "'android.R.id.tabcontent'");
         }
     }
 
     /**
      * If you are using
-     * {@link HorizontalTabSpec#setContent(android.content.Intent)}, this must
-     * be called since the activityGroup is needed to launch the local activity.
+     * {@link FlexibleTabSpec#setContent(android.content.Intent)}, this must be
+     * called since the activityGroup is needed to launch the local activity.
      * 
      * This is done for you if you extend {@link android.app.TabActivity}.
      * 
@@ -221,7 +223,7 @@ public class HorizontalTabHost extends FrameLayout implements
      * @param tabSpec
      *            Specifies how to create the indicator and content.
      */
-    public void addTab(final HorizontalTabSpec tabSpec) {
+    public void addTab(final FlexibleTabSpec tabSpec) {
 
         if (tabSpec.mIndicatorStrategy == null) {
             throw new IllegalArgumentException(
@@ -261,7 +263,7 @@ public class HorizontalTabHost extends FrameLayout implements
         invalidate();
     }
 
-    public HorizontalTabWidget getTabWidget() {
+    public FlexibleTabWidget getTabWidget() {
         return mTabWidget;
     }
 
@@ -347,7 +349,7 @@ public class HorizontalTabHost extends FrameLayout implements
         }
 
         mCurrentTab = index;
-        final HorizontalTabHost.HorizontalTabSpec spec = mTabSpecs.get(index);
+        final FlexibleTabHost.FlexibleTabSpec spec = mTabSpecs.get(index);
 
         // Call the tab widget's focusCurrentTab(), instead of just
         // selecting the tab.
@@ -424,21 +426,21 @@ public class HorizontalTabHost extends FrameLayout implements
      * {@link TabContentFactory} that creates the {@link View} content. 3) an
      * {@link Intent} that launches an {@link android.app.Activity}.
      */
-    public class HorizontalTabSpec {
+    public class FlexibleTabSpec {
 
         private final String mTag;
 
         private IndicatorStrategy mIndicatorStrategy;
         private ContentStrategy mContentStrategy;
 
-        private HorizontalTabSpec(final String tag) {
+        private FlexibleTabSpec(final String tag) {
             mTag = tag;
         }
 
         /**
          * Specify a label as the tab indicator.
          */
-        public HorizontalTabSpec setIndicator(final CharSequence label) {
+        public FlexibleTabSpec setIndicator(final CharSequence label) {
             mIndicatorStrategy = new LabelIndicatorStrategy(label);
             return this;
         }
@@ -446,7 +448,7 @@ public class HorizontalTabHost extends FrameLayout implements
         /**
          * Specify a label and icon as the tab indicator.
          */
-        public HorizontalTabSpec setIndicator(final CharSequence label,
+        public FlexibleTabSpec setIndicator(final CharSequence label,
                 final Drawable icon) {
             mIndicatorStrategy = new LabelAndIconIndicatorStrategy(label, icon);
             return this;
@@ -455,7 +457,7 @@ public class HorizontalTabHost extends FrameLayout implements
         /**
          * Specify a view as the tab indicator.
          */
-        public HorizontalTabSpec setIndicator(final View view) {
+        public FlexibleTabSpec setIndicator(final View view) {
             mIndicatorStrategy = new ViewIndicatorStrategy(view);
             return this;
         }
@@ -464,7 +466,7 @@ public class HorizontalTabHost extends FrameLayout implements
          * Specify the id of the view that should be used as the content of the
          * tab.
          */
-        public HorizontalTabSpec setContent(final int viewId) {
+        public FlexibleTabSpec setContent(final int viewId) {
             mContentStrategy = new ViewIdContentStrategy(viewId);
             return this;
         }
@@ -473,8 +475,7 @@ public class HorizontalTabHost extends FrameLayout implements
          * Specify a {@link android.widget.TabHost.TabContentFactory} to use to
          * create the content of the tab.
          */
-        public HorizontalTabSpec setContent(
-                final TabContentFactory contentFactory) {
+        public FlexibleTabSpec setContent(final TabContentFactory contentFactory) {
             mContentStrategy = new FactoryContentStrategy(mTag, contentFactory);
             return this;
         }
@@ -482,7 +483,7 @@ public class HorizontalTabHost extends FrameLayout implements
         /**
          * Specify an intent to use to launch an activity as the tab content.
          */
-        public HorizontalTabSpec setContent(final Intent intent) {
+        public FlexibleTabSpec setContent(final Intent intent) {
             mContentStrategy = new IntentContentStrategy(mTag, intent);
             return this;
         }

@@ -17,10 +17,10 @@ import android.widget.LinearLayout;
 /**
  * 
  * Displays a list of tab labels representing each page in the parent's tab
- * collection. The container object for this widget is {@link HorizontalTabHost
- * HorizontalTabHost}. When the user selects a tab, this object sends a message
- * to the parent container, TabHost, to tell it to switch the displayed page.
- * You typically won't use many methods directly on this object. The container
+ * collection. The container object for this widget is {@link FlexibleTabHost
+ * FlexibleTabHost}. When the user selects a tab, this object sends a message to
+ * the parent container, TabHost, to tell it to switch the displayed page. You
+ * typically won't use many methods directly on this object. The container
  * TabHost is used to add labels, add the callback handler, and manage
  * callbacks. You might call this object to iterate the list of tabs, or to
  * tweak the layout of the tab list, but most methods should be called on the
@@ -31,7 +31,7 @@ import android.widget.LinearLayout;
  * @attr ref android.R.styleable#TabWidget_tabStripLeft
  * @attr ref android.R.styleable#TabWidget_tabStripRight
  */
-public class HorizontalTabWidget extends LinearLayout implements
+public class FlexibleTabWidget extends LinearLayout implements
         OnFocusChangeListener {
     private OnTabSelectionChanged mSelectionChangedListener;
 
@@ -47,24 +47,24 @@ public class HorizontalTabWidget extends LinearLayout implements
 
     private final Rect mBounds = new Rect();
 
-    public HorizontalTabWidget(final Context context) {
+    public FlexibleTabWidget(final Context context) {
         this(context, null);
     }
 
-    public HorizontalTabWidget(final Context context, final AttributeSet attrs) {
+    public FlexibleTabWidget(final Context context, final AttributeSet attrs) {
         this(context, attrs, android.R.attr.tabWidgetStyle);
     }
 
-    public HorizontalTabWidget(final Context context, final AttributeSet attrs,
+    public FlexibleTabWidget(final Context context, final AttributeSet attrs,
             final int defStyle) {
         super(context, attrs);
         final TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.HorizontalTabWidget, defStyle, 0);
+                R.styleable.FlexibleTabWidget, defStyle, 0);
 
         // attributes
         mDrawBottomStrips = true;
         mDividerDrawable = a
-                .getDrawable(R.styleable.HorizontalTabWidget_android_divider);
+                .getDrawable(R.styleable.FlexibleTabWidget_android_divider);
         mLeftStrip = null;
         mRightStrip = null;
         initTabWidget();
@@ -223,7 +223,7 @@ public class HorizontalTabWidget extends LinearLayout implements
     /**
      * Controls whether the bottom strips on the tab indicators are drawn or
      * not. The default is to draw them. If the user specifies a custom view for
-     * the tab indicators, then the HorizontalTabHost class calls this method to
+     * the tab indicators, then the FlexibleTabHost class calls this method to
      * disable drawing of the bottom strips.
      * 
      * @param stripEnabled
@@ -407,7 +407,7 @@ public class HorizontalTabWidget extends LinearLayout implements
     }
 
     /**
-     * Provides a way for {@link HorizontalTabHost} to be notified that the user
+     * Provides a way for {@link FlexibleTabHost} to be notified that the user
      * clicked on a tab indicator.
      */
     void setTabSelectionListener(final OnTabSelectionChanged listener) {
@@ -451,13 +451,13 @@ public class HorizontalTabWidget extends LinearLayout implements
     }
 
     /**
-     * Let {@link HorizontalTabHost} know that the user clicked on a tab
+     * Let {@link FlexibleTabHost} know that the user clicked on a tab
      * indicator.
      */
     static interface OnTabSelectionChanged {
         /**
-         * Informs the HorizontalTabHost which tab was selected. It also
-         * indicates if the tab was clicked/pressed or just focused into.
+         * Informs the FlexibleTabHost which tab was selected. It also indicates
+         * if the tab was clicked/pressed or just focused into.
          * 
          * @param tabIndex
          *            index of the tab that was selected
