@@ -2,6 +2,7 @@ package pl.polidea.customwidget;
 
 import pl.polidea.demo.R;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -47,6 +48,8 @@ public class FlexibleTabWidget extends LinearLayout implements
 
     private final Rect mBounds = new Rect();
 
+    private int orientation;
+
     public FlexibleTabWidget(final Context context) {
         this(context, null);
     }
@@ -91,7 +94,19 @@ public class FlexibleTabWidget extends LinearLayout implements
     }
 
     private void initTabWidget() {
-        setOrientation(LinearLayout.HORIZONTAL);
+        final int orientation = getResources().getConfiguration().orientation;
+        switch (orientation) {
+        case Configuration.ORIENTATION_LANDSCAPE:
+            setOrientation(LinearLayout.VERTICAL);
+            this.orientation = Configuration.ORIENTATION_LANDSCAPE;
+            break;
+        case Configuration.ORIENTATION_PORTRAIT:
+        case Configuration.ORIENTATION_SQUARE:
+        case Configuration.ORIENTATION_UNDEFINED:
+            setOrientation(LinearLayout.HORIZONTAL);
+            this.orientation = Configuration.ORIENTATION_PORTRAIT;
+            break;
+        }
         // XXX: childrenDrawingOrderEnabled
         final Context context = getContext();
         final Resources resources = context.getResources();
@@ -275,26 +290,55 @@ public class FlexibleTabWidget extends LinearLayout implements
         leftStrip.setState(selectedChild.getDrawableState());
         rightStrip.setState(selectedChild.getDrawableState());
 
-        if (mStripMoved) {
-            final Rect bounds = mBounds;
-            bounds.left = selectedChild.getLeft();
-            bounds.right = selectedChild.getRight();
-            final int myHeight = getHeight();
-            leftStrip.setBounds(
-                    Math.min(0, bounds.left - leftStrip.getIntrinsicWidth()),
-                    myHeight - leftStrip.getIntrinsicHeight(), bounds.left,
-                    myHeight);
-            rightStrip.setBounds(
-                    bounds.right,
-                    myHeight - rightStrip.getIntrinsicHeight(),
-                    Math.max(getWidth(),
-                            bounds.right + rightStrip.getIntrinsicWidth()),
-                    myHeight);
-            mStripMoved = false;
+        switch (orientation) {
+        case Configuration.ORIENTATION_LANDSCAPE:
+            if (mStripMoved) {
+                final Rect bounds = mBounds;
+                bounds.top = selectedChild.getTop();
+                bounds.bottom = selectedChild.getBottom();
+                final int myWidth = getWidth();
+                leftStrip
+                        .setBounds(
+                                myWidth - leftStrip.getIntrinsicWidth(),
+                                Math.min(
+                                        0,
+                                        bounds.top
+                                                - leftStrip
+                                                        .getIntrinsicHeight()),
+                                myWidth, bounds.top);
+                rightStrip.setBounds(myWidth - rightStrip.getIntrinsicWidth(),
+                        bounds.bottom, myWidth, Math
+                                .max(getHeight(),
+                                        bounds.bottom
+                                                + rightStrip
+                                                        .getIntrinsicHeight()));
+                mStripMoved = false;
+            }
+            leftStrip.draw(canvas);
+            rightStrip.draw(canvas);
+        case Configuration.ORIENTATION_PORTRAIT:
+        default:
+            if (mStripMoved) {
+                final Rect bounds = mBounds;
+                bounds.left = selectedChild.getLeft();
+                bounds.right = selectedChild.getRight();
+                final int myHeight = getHeight();
+                leftStrip
+                        .setBounds(Math.min(0,
+                                bounds.left - leftStrip.getIntrinsicWidth()),
+                                myHeight - leftStrip.getIntrinsicHeight(),
+                                bounds.left, myHeight);
+                rightStrip.setBounds(
+                        bounds.right,
+                        myHeight - rightStrip.getIntrinsicHeight(),
+                        Math.max(getWidth(),
+                                bounds.right + rightStrip.getIntrinsicWidth()),
+                        myHeight);
+                mStripMoved = false;
+            }
+            leftStrip.draw(canvas);
+            rightStrip.draw(canvas);
         }
-
-        leftStrip.draw(canvas);
-        rightStrip.draw(canvas);
     }
 
     /**
@@ -375,8 +419,18 @@ public class FlexibleTabWidget extends LinearLayout implements
     @Override
     public void addView(final View child) {
         if (child.getLayoutParams() == null) {
-            final LinearLayout.LayoutParams lp = new LayoutParams(0,
-                    ViewGroup.LayoutParams.FILL_PARENT, 1.0f);
+            LinearLayout.LayoutParams lp;
+            switch (orientation) {
+            case Configuration.ORIENTATION_LANDSCAPE:
+                lp = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 0,
+                        1.0f);
+                break;
+            case Configuration.ORIENTATION_PORTRAIT:
+            default:
+                lp = new LayoutParams(0, ViewGroup.LayoutParams.FILL_PARENT,
+                        1.0f);
+                break;
+            }
             lp.setMargins(0, 0, 0, 0);
             child.setLayoutParams(lp);
         }
