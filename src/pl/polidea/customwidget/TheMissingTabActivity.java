@@ -107,9 +107,8 @@ public class TheMissingTabActivity extends ActivityGroup {
         mTabHost = (TheMissingTabHost) findViewById(android.R.id.tabhost);
 
         if (mTabHost == null) {
-            throw new RuntimeException(
-                    "Your content must have a TabHost whose id attribute is "
-                            + "'android.R.id.tabhost'");
+            throw new RuntimeException("Your content must have a TabHost whose id attribute is "
+                    + "'android.R.id.tabhost'");
         }
         mTabHost.setup(getLocalActivityManager());
     }
@@ -121,8 +120,7 @@ public class TheMissingTabActivity extends ActivityGroup {
     }
 
     @Override
-    protected void onChildTitleChanged(final Activity childActivity,
-            final CharSequence title) {
+    protected void onChildTitleChanged(final Activity childActivity, final CharSequence title) {
         // Dorky implementation until we can have multiple activities running.
         if (getLocalActivityManager().getCurrentActivity() == childActivity) {
             final View tabView = mTabHost.getCurrentTabView();

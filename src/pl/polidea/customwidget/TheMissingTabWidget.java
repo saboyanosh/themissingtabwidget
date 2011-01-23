@@ -35,8 +35,7 @@ import android.widget.LinearLayout;
  * @attr ref android.R.styleable#TabWidget_tabStripLeft
  * @attr ref android.R.styleable#TabWidget_tabStripRight
  */
-public class TheMissingTabWidget extends LinearLayout implements
-        OnFocusChangeListener {
+public class TheMissingTabWidget extends LinearLayout implements OnFocusChangeListener {
     private OnTabSelectionChanged mSelectionChangedListener;
 
     private int mSelectedTab = 0;
@@ -61,24 +60,20 @@ public class TheMissingTabWidget extends LinearLayout implements
         this(context, attrs, android.R.attr.tabWidgetStyle);
     }
 
-    public TheMissingTabWidget(final Context context, final AttributeSet attrs,
-            final int defStyle) {
+    public TheMissingTabWidget(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs);
-        final TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.TheMissingTabWidget, defStyle, 0);
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TheMissingTabWidget, defStyle, 0);
 
         // attributes
         mDrawBottomStrips = true;
-        mDividerDrawable = a
-                .getDrawable(R.styleable.TheMissingTabWidget_android_divider);
+        mDividerDrawable = a.getDrawable(R.styleable.TheMissingTabWidget_android_divider);
         mLeftStrip = null;
         mRightStrip = null;
         initTabWidget();
     }
 
     @Override
-    protected void onSizeChanged(final int w, final int h, final int oldw,
-            final int oldh) {
+    protected void onSizeChanged(final int w, final int h, final int oldw, final int oldh) {
         mStripMoved = true;
         super.onSizeChanged(w, h, oldw, oldh);
     }
@@ -99,8 +94,7 @@ public class TheMissingTabWidget extends LinearLayout implements
     private void updateChildrenDrawingOrder() {
         try {
             final Class< ? > clazz = ViewGroup.class;
-            final Method m = clazz.getDeclaredMethod(
-                    "setChildrenDrawingOrderEnabled", boolean.class);
+            final Method m = clazz.getDeclaredMethod("setChildrenDrawingOrderEnabled", boolean.class);
             m.invoke(this, true);
             return;
         } catch (final SecurityException e) {
@@ -320,21 +314,10 @@ public class TheMissingTabWidget extends LinearLayout implements
                 bounds.top = selectedChild.getTop();
                 bounds.bottom = selectedChild.getBottom();
                 final int myWidth = getWidth();
-                leftStrip
-                        .setBounds(
-                                myWidth - leftStrip.getIntrinsicWidth(),
-                                Math.min(
-                                        0,
-                                        bounds.top
-                                                - leftStrip
-                                                        .getIntrinsicHeight()),
-                                myWidth, bounds.top);
-                rightStrip.setBounds(myWidth - rightStrip.getIntrinsicWidth(),
-                        bounds.bottom, myWidth, Math
-                                .max(getHeight(),
-                                        bounds.bottom
-                                                + rightStrip
-                                                        .getIntrinsicHeight()));
+                leftStrip.setBounds(myWidth - leftStrip.getIntrinsicWidth(),
+                        Math.min(0, bounds.top - leftStrip.getIntrinsicHeight()), myWidth, bounds.top);
+                rightStrip.setBounds(myWidth - rightStrip.getIntrinsicWidth(), bounds.bottom, myWidth,
+                        Math.max(getHeight(), bounds.bottom + rightStrip.getIntrinsicHeight()));
                 mStripMoved = false;
             }
             leftStrip.draw(canvas);
@@ -346,17 +329,10 @@ public class TheMissingTabWidget extends LinearLayout implements
                 bounds.left = selectedChild.getLeft();
                 bounds.right = selectedChild.getRight();
                 final int myHeight = getHeight();
-                leftStrip
-                        .setBounds(Math.min(0,
-                                bounds.left - leftStrip.getIntrinsicWidth()),
-                                myHeight - leftStrip.getIntrinsicHeight(),
-                                bounds.left, myHeight);
-                rightStrip.setBounds(
-                        bounds.right,
-                        myHeight - rightStrip.getIntrinsicHeight(),
-                        Math.max(getWidth(),
-                                bounds.right + rightStrip.getIntrinsicWidth()),
-                        myHeight);
+                leftStrip.setBounds(Math.min(0, bounds.left - leftStrip.getIntrinsicWidth()),
+                        myHeight - leftStrip.getIntrinsicHeight(), bounds.left, myHeight);
+                rightStrip.setBounds(bounds.right, myHeight - rightStrip.getIntrinsicHeight(),
+                        Math.max(getWidth(), bounds.right + rightStrip.getIntrinsicWidth()), myHeight);
                 mStripMoved = false;
             }
             leftStrip.draw(canvas);
@@ -445,13 +421,11 @@ public class TheMissingTabWidget extends LinearLayout implements
             LinearLayout.LayoutParams lp;
             switch (orientation) {
             case Configuration.ORIENTATION_LANDSCAPE:
-                lp = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 0,
-                        1.0f);
+                lp = new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 0, 1.0f);
                 break;
             case Configuration.ORIENTATION_PORTRAIT:
             default:
-                lp = new LayoutParams(0, ViewGroup.LayoutParams.FILL_PARENT,
-                        1.0f);
+                lp = new LayoutParams(0, ViewGroup.LayoutParams.FILL_PARENT, 1.0f);
                 break;
             }
             lp.setMargins(0, 0, 0, 0);
@@ -467,8 +441,7 @@ public class TheMissingTabWidget extends LinearLayout implements
         // tab, then add a divider before adding the next tab.
         if (mDividerDrawable != null && getTabCount() > 0) {
             final ImageView divider = new ImageView(getContext());
-            final LinearLayout.LayoutParams lp = new LayoutParams(
-                    mDividerDrawable.getIntrinsicWidth(),
+            final LinearLayout.LayoutParams lp = new LayoutParams(mDividerDrawable.getIntrinsicWidth(),
                     LayoutParams.FILL_PARENT);
             lp.setMargins(0, 0, 0, 0);
             divider.setLayoutParams(lp);
@@ -479,8 +452,7 @@ public class TheMissingTabWidget extends LinearLayout implements
 
         // TODO: detect this via geometry with a tabwidget listener rather
         // than potentially interfere with the view's listener
-        child.setOnClickListener(new TheMissingTabClickListener(
-                getTabCount() - 1));
+        child.setOnClickListener(new TheMissingTabClickListener(getTabCount() - 1));
         child.setOnFocusChangeListener(this);
     }
 

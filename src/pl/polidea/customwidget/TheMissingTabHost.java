@@ -23,6 +23,7 @@ import pl.polidea.demo.R;
 import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -43,43 +44,14 @@ import android.widget.TextView;
  * typically controlled using this container object, rather than setting values
  * on the child elements themselves.
  */
-public class TheMissingTabHost extends FrameLayout implements
-        ViewTreeObserver.OnTouchModeChangeListener {
+public class TheMissingTabHost extends FrameLayout implements ViewTreeObserver.OnTouchModeChangeListener {
 
     private TheMissingTabWidget mTabWidget;
     private FrameLayout mTabContent;
-    private final List<TheMissingTabSpec> mTabSpecs = new ArrayList<TheMissingTabSpec>(
-            2);
+    private final List<TheMissingTabSpec> mTabSpecs = new ArrayList<TheMissingTabSpec>(2);
     protected int mCurrentTab = -1;
     private View mCurrentView = null;
-    /**
-     * This field should be made private, so it is hidden from the SDK. {@hide
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * }
-     */
+    private boolean landscapePicturesAboveTitles = true;
     protected LocalActivityManager mLocalActivityManager = null;
     private OnTabChangeListener mOnTabChangeListener;
     private OnKeyListener mTabKeyListener;
@@ -91,7 +63,18 @@ public class TheMissingTabHost extends FrameLayout implements
 
     public TheMissingTabHost(final Context context, final AttributeSet attrs) {
         super(context, attrs);
+        parseAttributes(context, attrs);
         initTabHost();
+    }
+
+    private void parseAttributes(final Context context, final AttributeSet attrs) {
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TheMissingTabWidget);
+        try {
+            landscapePicturesAboveTitles = a.getBoolean(R.styleable.TheMissingTabWidget_pictures_in_landscape_above,
+                    false);
+        } finally {
+            a.recycle();
+        }
     }
 
     private void initTabHost() {
@@ -110,6 +93,20 @@ public class TheMissingTabHost extends FrameLayout implements
      */
     public TheMissingTabSpec newTabSpec(final String tag) {
         return new TheMissingTabSpec(tag);
+    }
+
+    /**
+     * Allows to set whether icons should be displayed above titles or left of
+     * them in landscape mode. Courtesy of Thierry :
+     * http://sites.google.com/site/freeboxrecorder/
+     * 
+     * @param landscapePicturesAboveTitles
+     *            if true, then icons will be displayed above titles in the tab
+     *            view. By default it is false which means that the icons will
+     *            be displayed left of title.
+     */
+    public void setLandscapePicturesAboveTitles(final boolean landscapePicturesAboveTitles) {
+        this.landscapePicturesAboveTitles = landscapePicturesAboveTitles;
     }
 
     /**
@@ -135,8 +132,7 @@ public class TheMissingTabHost extends FrameLayout implements
         // and relays them to the tab content.
         mTabKeyListener = new OnKeyListener() {
             @Override
-            public boolean onKey(final View v, final int keyCode,
-                    final KeyEvent event) {
+            public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
                 switch (keyCode) {
                 case KeyEvent.KEYCODE_DPAD_CENTER:
                 case KeyEvent.KEYCODE_DPAD_LEFT:
@@ -153,23 +149,20 @@ public class TheMissingTabHost extends FrameLayout implements
 
         };
 
-        mTabWidget
-                .setTabSelectionListener(new TheMissingTabWidget.OnTabSelectionChanged() {
-                    @Override
-                    public void onTabSelectionChanged(final int tabIndex,
-                            final boolean clicked) {
-                        setCurrentTab(tabIndex);
-                        if (clicked) {
-                            mTabContent.requestFocus(View.FOCUS_FORWARD);
-                        }
-                    }
-                });
+        mTabWidget.setTabSelectionListener(new TheMissingTabWidget.OnTabSelectionChanged() {
+            @Override
+            public void onTabSelectionChanged(final int tabIndex, final boolean clicked) {
+                setCurrentTab(tabIndex);
+                if (clicked) {
+                    mTabContent.requestFocus(View.FOCUS_FORWARD);
+                }
+            }
+        });
 
         mTabContent = (FrameLayout) findViewById(android.R.id.tabcontent);
         if (mTabContent == null) {
-            throw new RuntimeException(
-                    "Your TheMissingTabHost must have a FrameLayout whose id attribute is "
-                            + "'android.R.id.tabcontent'");
+            throw new RuntimeException("Your TheMissingTabHost must have a FrameLayout whose id attribute is "
+                    + "'android.R.id.tabcontent'");
         }
     }
 
@@ -214,8 +207,7 @@ public class TheMissingTabHost extends FrameLayout implements
         if (!isInTouchMode) {
             // leaving touch mode.. if nothing has focus, let's give it to
             // the indicator of the current tab
-            if (mCurrentView != null
-                    && (!mCurrentView.hasFocus() || mCurrentView.isFocused())) {
+            if (mCurrentView != null && (!mCurrentView.hasFocus() || mCurrentView.isFocused())) {
                 mTabWidget.getChildTabViewAt(mCurrentTab).requestFocus();
             }
         }
@@ -230,16 +222,13 @@ public class TheMissingTabHost extends FrameLayout implements
     public void addTab(final TheMissingTabSpec tabSpec) {
 
         if (tabSpec.mIndicatorStrategy == null) {
-            throw new IllegalArgumentException(
-                    "you must specify a way to create the tab indicator.");
+            throw new IllegalArgumentException("you must specify a way to create the tab indicator.");
         }
 
         if (tabSpec.mContentStrategy == null) {
-            throw new IllegalArgumentException(
-                    "you must specify a way to create the tab content");
+            throw new IllegalArgumentException("you must specify a way to create the tab content");
         }
-        final View tabIndicator = tabSpec.mIndicatorStrategy
-                .createIndicatorView();
+        final View tabIndicator = tabSpec.mIndicatorStrategy.createIndicatorView();
         tabIndicator.setOnKeyListener(mTabKeyListener);
 
         // If this is a custom view, then do not draw the bottom strips for
@@ -318,12 +307,10 @@ public class TheMissingTabHost extends FrameLayout implements
         // activities
         // when there is nothing that will take focus from default focus
         // searching
-        if (!handled && event.getAction() == KeyEvent.ACTION_DOWN
-                && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP
+        if (!handled && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP
                 && mCurrentView != null
                 // && mCurrentView.isRootNamespace()
-                && mCurrentView.hasFocus()
-                && mCurrentView.findFocus().focusSearch(View.FOCUS_UP) == null) {
+                && mCurrentView.hasFocus() && mCurrentView.findFocus().focusSearch(View.FOCUS_UP) == null) {
             mTabWidget.getChildTabViewAt(mCurrentTab).requestFocus();
             playSoundEffect(SoundEffectConstants.NAVIGATION_UP);
             return true;
@@ -363,8 +350,7 @@ public class TheMissingTabHost extends FrameLayout implements
         mCurrentView = spec.mContentStrategy.getContentView();
 
         if (mCurrentView.getParent() == null) {
-            mTabContent.addView(mCurrentView, new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT,
+            mTabContent.addView(mCurrentView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                     ViewGroup.LayoutParams.FILL_PARENT));
         }
 
@@ -452,8 +438,7 @@ public class TheMissingTabHost extends FrameLayout implements
         /**
          * Specify a label and icon as the tab indicator.
          */
-        public TheMissingTabSpec setIndicator(final CharSequence label,
-                final Drawable icon) {
+        public TheMissingTabSpec setIndicator(final CharSequence label, final Drawable icon) {
             mIndicatorStrategy = new LabelAndIconIndicatorStrategy(label, icon);
             return this;
         }
@@ -479,8 +464,7 @@ public class TheMissingTabHost extends FrameLayout implements
          * Specify a {@link android.widget.TabHost.TabContentFactory} to use to
          * create the content of the tab.
          */
-        public TheMissingTabSpec setContent(
-                final TabContentFactory contentFactory) {
+        public TheMissingTabSpec setContent(final TabContentFactory contentFactory) {
             mContentStrategy = new FactoryContentStrategy(mTag, contentFactory);
             return this;
         }
@@ -540,17 +524,14 @@ public class TheMissingTabHost extends FrameLayout implements
         @Override
         public View createIndicatorView() {
             final Context context = getContext();
-            final LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final View tabIndicator = inflater.inflate(R.layout.tab_indicator,
-                    mTabWidget, // tab widget is
-                                // the parent
-                    false); // no inflate params
-
-            final TextView tv = (TextView) tabIndicator
-                    .findViewById(android.R.id.title);
+            final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            int indicatorLayout = R.layout.tab_indicator;
+            if (landscapePicturesAboveTitles) {
+                indicatorLayout = R.layout.tab_indicator_picture_in_landscape_above;
+            }
+            final View tabIndicator = inflater.inflate(indicatorLayout, mTabWidget, false);
+            final TextView tv = (TextView) tabIndicator.findViewById(android.R.id.title);
             tv.setText(mLabel);
-
             /*
              * if (context.getApplicationInfo().targetSdkVersion <=
              * Build.VERSION_CODES.DONUT) { // Donut apps get old color scheme
@@ -570,8 +551,7 @@ public class TheMissingTabHost extends FrameLayout implements
         private final CharSequence mLabel;
         private final Drawable mIcon;
 
-        private LabelAndIconIndicatorStrategy(final CharSequence label,
-                final Drawable icon) {
+        private LabelAndIconIndicatorStrategy(final CharSequence label, final Drawable icon) {
             mLabel = label;
             mIcon = icon;
         }
@@ -579,18 +559,20 @@ public class TheMissingTabHost extends FrameLayout implements
         @Override
         public View createIndicatorView() {
             final Context context = getContext();
-            final LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final View tabIndicator = inflater.inflate(R.layout.tab_indicator,
-                    mTabWidget, // tab widget is the parent
-                    false); // no inflate params
+            final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            final TextView tv = (TextView) tabIndicator
-                    .findViewById(android.R.id.title);
+            int indicatorLayout = R.layout.tab_indicator;
+
+            if (landscapePicturesAboveTitles) {
+                indicatorLayout = R.layout.tab_indicator_picture_in_landscape_above;
+            }
+            final View tabIndicator = inflater.inflate(indicatorLayout, mTabWidget, // parent
+                    false);
+
+            final TextView tv = (TextView) tabIndicator.findViewById(android.R.id.title);
             tv.setText(mLabel);
 
-            final ImageView iconView = (ImageView) tabIndicator
-                    .findViewById(R.id.icon);
+            final ImageView iconView = (ImageView) tabIndicator.findViewById(R.id.icon);
             iconView.setImageDrawable(mIcon);
 
             // if (context.getApplicationInfo().targetSdkVersion <=
@@ -634,9 +616,8 @@ public class TheMissingTabHost extends FrameLayout implements
             if (mView != null) {
                 mView.setVisibility(View.GONE);
             } else {
-                throw new RuntimeException(
-                        "Could not create tab content because "
-                                + "could not find view with id " + viewId);
+                throw new RuntimeException("Could not create tab content because " + "could not find view with id "
+                        + viewId);
             }
         }
 
@@ -660,8 +641,7 @@ public class TheMissingTabHost extends FrameLayout implements
         private final CharSequence mTag;
         private final TabContentFactory mFactory;
 
-        public FactoryContentStrategy(final CharSequence tag,
-                final TabContentFactory factory) {
+        public FactoryContentStrategy(final CharSequence tag, final TabContentFactory factory) {
             mTag = tag;
             mFactory = factory;
         }
@@ -723,8 +703,7 @@ public class TheMissingTabHost extends FrameLayout implements
             if (mLaunchedView != null) {
                 mLaunchedView.setVisibility(View.VISIBLE);
                 mLaunchedView.setFocusableInTouchMode(true);
-                ((ViewGroup) mLaunchedView)
-                        .setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
+                ((ViewGroup) mLaunchedView).setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
             }
             return mLaunchedView;
         }

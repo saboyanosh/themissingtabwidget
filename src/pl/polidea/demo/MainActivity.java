@@ -14,19 +14,25 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main);
         final Button original = (Button) findViewById(R.id.OriginalButton);
         final Button theMissing = (Button) findViewById(R.id.TheMissingButton);
+        final Button theMissingPicturesAbove = (Button) findViewById(R.id.TheMissingButtonPicturesAbove);
         original.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final Intent myIntent = new Intent(MainActivity.this,
-                        OriginalTabWidgetDemo.class);
+                final Intent myIntent = new Intent(MainActivity.this, OriginalTabWidgetDemo.class);
                 MainActivity.this.startActivity(myIntent);
             }
         });
         theMissing.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
-                final Intent myIntent = new Intent(MainActivity.this,
-                        TheMissingTabWidgetDemo.class);
+                final Intent myIntent = new Intent(MainActivity.this, TheMissingTabWidgetDemo.class);
+                MainActivity.this.startActivity(myIntent);
+            }
+        });
+        theMissingPicturesAbove.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                final Intent myIntent = new Intent(MainActivity.this, TheMissingTabWidgetDemoWithPicturesAbove.class);
                 MainActivity.this.startActivity(myIntent);
             }
         });
