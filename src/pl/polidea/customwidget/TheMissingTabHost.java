@@ -51,7 +51,7 @@ public class TheMissingTabHost extends FrameLayout implements ViewTreeObserver.O
     private final List<TheMissingTabSpec> mTabSpecs = new ArrayList<TheMissingTabSpec>(2);
     protected int mCurrentTab = -1;
     private View mCurrentView = null;
-    private boolean landscapePicturesAboveTitles = true;
+    private boolean landscapePicturesAboveTitles = false;
     protected LocalActivityManager mLocalActivityManager = null;
     private OnTabChangeListener mOnTabChangeListener;
     private OnKeyListener mTabKeyListener;
