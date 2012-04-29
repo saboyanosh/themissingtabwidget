@@ -14,9 +14,6 @@ buildscript {
     }
 }
 
-
-
-
 apply plugin: 'ameba-project-configuration'
 apply plugin: 'ameba-mercurial'
 //apply plugin: 'ameba-git'
